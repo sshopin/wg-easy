@@ -22,6 +22,7 @@ services:
       - INIT_USERNAME=testtest
       - INIT_PASSWORD=Qweasdyxcv!2
       - APP_SUBFOLDER=/wg-easy
+      - PUBLIC_APP_TITLE=
 
 # folders should be generated inside container
 volumes:

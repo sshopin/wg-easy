@@ -1,5 +1,7 @@
 <template>
   <main>
+<!-- Adding additional header with the PUBLIC_APP_TITLE value-->
+<h2 class="text-xl font-bold mb-5 text-center">{{ config.public.appTitle }} </h2>
     <Panel>
       <PanelHead>
         <PanelHeadTitle :text="$t('pages.clients')" />
@@ -28,6 +30,10 @@
 </template>
 
 <script setup lang="ts">
+// Getting acces to config.public.appTitle
+import { useRuntimeConfig } from '#app';
+const config = useRuntimeConfig();
+
 const authStore = useAuthStore();
 authStore.update();
 

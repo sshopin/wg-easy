@@ -5,6 +5,11 @@ export default defineNuxtConfig({
   future: {
     compatibilityVersion: 4,
   },
+  runtimeConfig: {
+    public: {
+      appTitle: process.env.PUBLIC_APP_TITLE || '',
+    },
+  },
   compatibilityDate: '2025-02-04',
   devtools: { enabled: true },
   modules: [

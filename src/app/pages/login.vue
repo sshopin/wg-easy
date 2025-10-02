@@ -6,6 +6,8 @@
       class="mx-auto mt-10 flex w-64 flex-col gap-5 overflow-hidden rounded-md bg-white p-5 text-gray-700 shadow dark:bg-neutral-700 dark:text-neutral-200"
       @submit.prevent="submit"
     >
+<!-- Adding additional header with the PUBLIC_APP_TITLE value-->
+      <h2 class="text-xl font-bold mb-5 text-center">{{ config.public.appTitle }} </h2>
       <!-- Avatar -->
       <div
         class="mx-auto mb-5 mt-5 h-20 w-20 overflow-hidden rounded-full bg-red-800 dark:bg-red-800"
@@ -67,6 +69,11 @@
 </template>
 
 <script setup lang="ts">
+// getting access to config.public.appTitle
+import { useRuntimeConfig } from '#app';
+const config = useRuntimeConfig();
+
+
 const authStore = useAuthStore();
 authStore.update();
 
