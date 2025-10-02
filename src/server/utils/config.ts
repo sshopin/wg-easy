@@ -29,6 +29,7 @@ export const WG_ENV = {
       : undefined,
   /** TODO: delete on next major version */
   EXPERIMENTAL_AWG: process.env.EXPERIMENTAL_AWG === 'true',
+  APP_SUBFOLDER: process.env.APP_SUBFOLDER,
 };
 
 export const WG_INITIAL_ENV = {
