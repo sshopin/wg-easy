@@ -1,10 +1,23 @@
 <template>
-  <div v-if="client.oneTimeLink !== null" class="text-xs text-gray-400">
+  <div v-if="client.oneTimeLink !== null" class="text-xs text-gray-400">    
     <a :href="'./cnf/' + client.oneTimeLink.oneTimeLink">{{ path }}</a>
   </div>
 </template>
 
 <script setup lang="ts">
+const config = useRuntimeConfig();  // Получаем config
+
+const baseURL0 = config.public.appbaseURL;
+
+let SubFolder = baseURL0;
+if (SubFolder.length > 1 && !SubFolder.startsWith('/')) {
+  SubFolder = '/' + SubFolder;
+};
+
+if (SubFolder.length > 1 && !SubFolder.endsWith('/')) {
+  SubFolder = SubFolder + '/';
+}
+
 const props = defineProps<{ client: LocalClient }>();
 
 const path = ref('Loading...');
@@ -22,7 +35,7 @@ onMounted(() => {
       new Date(props.client.oneTimeLink.expiresAt).getTime() - Date.now();
 
     if (timeLeft <= 0) {
-      path.value = `${document.location.protocol}//${document.location.host}/cnf/${props.client.oneTimeLink.oneTimeLink} (00:00)`;
+      path.value = `${document.location.protocol}//${document.location.host}${SubFolder}cnf/${props.client.oneTimeLink.oneTimeLink} (00:00)`;
       return;
     }
 
@@ -39,7 +52,7 @@ onMounted(() => {
     date.setMinutes(minutes);
     date.setSeconds(seconds);
 
-    path.value = `${document.location.protocol}//${document.location.host}/cnf/${props.client.oneTimeLink.oneTimeLink} (${formatter.format(date)})`;
+    path.value = `${document.location.protocol}//${document.location.host}${SubFolder}cnf/${props.client.oneTimeLink.oneTimeLink} (${formatter.format(date)})`;
   }, 1000);
 });
 

@@ -2,6 +2,14 @@ import { fileURLToPath } from 'node:url';
 
 // https://nuxt.com/docs/api/configuration/nuxt-config
 export default defineNuxtConfig({
+  app: {
+    baseURL: process.env.APP_SUBFOLDER || '/',   // for API
+  },
+  runtimeConfig: {
+    public: {
+        appbaseURL: process.env.APP_SUBFOLDER || '',  // for JS code here     
+    },
+  },
   future: {
     compatibilityVersion: 4,
   },
@@ -125,3 +133,5 @@ export default defineNuxtConfig({
     '#db': fileURLToPath(new URL('./server/database/', import.meta.url)),
   },
 });
+
+
