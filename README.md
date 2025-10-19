@@ -1,5 +1,15 @@
 # WireGuard Easy
 
+Added feature:
+ - wg-easy is working in subfolder such as /wg-easy, not in webserver root.
+
+We use app.baseURL NUXT config for server side and runtimeConfig.public.appbaseURL for client-side code.
+
+**Attention**: This is project-specific work. 
+**It has very limited applications since subfolder name is hard-coded to server-side code on docker build (on pnpm build stage).**
+So the docker image must be rebuild for every subfolder.
+
+
 [![Build & Publish latest Image](https://github.com/wg-easy/wg-easy/actions/workflows/deploy.yml/badge.svg?branch=production)](https://github.com/wg-easy/wg-easy/actions/workflows/deploy.yml)
 [![Lint](https://github.com/wg-easy/wg-easy/actions/workflows/lint.yml/badge.svg?branch=master)](https://github.com/wg-easy/wg-easy/actions/workflows/lint.yml)
 [![GitHub Stars](https://img.shields.io/github/stars/wg-easy/wg-easy)](https://github.com/wg-easy/wg-easy/stargazers)
