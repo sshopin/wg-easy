@@ -1,4 +1,5 @@
 import { WG_ENV } from '../utils/config';
+import { getRequestHeaders } from 'h3';
 
 function joinPath(...segments: string[]): string {
   const result =segments
@@ -11,29 +12,43 @@ function joinPath(...segments: string[]): string {
 /* First setup of wg-easy */
 export default defineEventHandler(async (event) => {
   try {
-    const url = getRequestURL(event);
-    process.stderr.write(`url.pathname =${url.pathname}\n`);
-    
-    const prefix = WG_ENV.APP_SUBFOLDER || '/';  // from process.env
-    process.stderr.write(`prefix=${prefix}\n`);
 
-    const config = useRuntimeConfig()  
-    const baseURL = config.public.baseURL;
-    process.stderr.write(`baseURL=${baseURL}\n`);
+    //SERVER_DEBUG('------->defineEventHandler'); // for debugging
+
+    const headers = getRequestHeaders(event);
+    //SERVER_DEBUG('All headers:', headers); // for debugging
+    const prefix = headers['x-forwarded-prefix'] || '/';
+    
+    const url = getRequestURL(event);     
+
+    const config = useRuntimeConfig();
+    //SERVER_DEBUG(`app.baseURL=${config.app.baseURL}`); // for debugging
+
+    const cache_control = headers['cache-control'] || '';
+    if (cache_control == '') // skip health-check requests
+    {
+      if (prefix !== config.app.baseURL)
+      {      
+        SERVER_DEBUG(`!!! Misconfiguration: X-Forwarded-Prefix=${prefix}, build-in prefix (app.baseURL)=${config.app.baseURL}\n`);   
+      }               
+    }
+    /*else
+    {
+      SERVER_DEBUG('cache control request:', url.pathname); // for debugging      
+    }*/
 
     if (prefix !== '/')
     {
       if (!url.pathname.startsWith(prefix))
-      {
-        process.stderr.write(`incorrect URL\n`);
+      {     
+        SERVER_DEBUG(`Incorrect URL: prefix=${prefix}, url.pathname=${url.pathname}\n`);   
         return; // incorrect URL
       }
     }
     
-    // remove prefix
+    // remove prefix from URL
     const normalizedPath0 = prefix === '/' ? url.pathname : url.pathname.replace(new RegExp(`^${prefix}`), '');
     const normalizedPath = normalizedPath0 === '' ? '/' : normalizedPath0; 
-    process.stderr.write(`normalizedPath =${normalizedPath }\n`);
         
     // User can't be logged in, and public routes can be accessed whenever
     if (normalizedPath.startsWith('/api/')) {
@@ -42,6 +57,7 @@ export default defineEventHandler(async (event) => {
 
     const parsedSetup = normalizedPath.match(/\/setup\/(\d+)/);
 
+    // adding prefix to all sendRedirect here
     const { step, done } = await Database.general.getSetupStep();
     if (!done) {    
       
@@ -66,12 +82,9 @@ export default defineEventHandler(async (event) => {
     }
   }
   catch (error) {
-    // Logging error
-    console.error('API error:', error);
-    process.stderr.write(`API error: ${error}\n`);
-        
+    // Log the error
+    SERVER_DEBUG('API error:', error);    
     
-    // Возвращаем дружелюбное сообщение клиенту (не показываем стек в проде)
     if (process.env.NODE_ENV === 'development') {
       return createError({
         statusCode: 500,

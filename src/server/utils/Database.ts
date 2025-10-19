@@ -3,6 +3,7 @@
  * This design allows for easy swapping of different database implementations.
  */
 import { connect, type DBServiceType } from '#db/sqlite';
+import Config from './config.ts';
 
 const nullObject = new Proxy(
   {},
@@ -19,6 +20,7 @@ let provider = nullObject as never as DBServiceType;
 connect().then((db) => {
   provider = db;
   WireGuard.Startup();
+  Config.Startup();
 });
 
 export default provider;

@@ -55,3 +55,21 @@ function assertEnv<T extends string>(env: T) {
 
   return val;
 }
+
+class Config {
+  async Startup() {
+    SERVER_DEBUG('config.ts startup');
+
+    const env_prefix = WG_ENV.APP_SUBFOLDER || '';  // from process.env   
+    const config = useRuntimeConfig();
+
+    if (config.app.baseURL !== env_prefix)
+    {
+      SERVER_DEBUG(`!!! Misconfiguration: app.baseURL != WG_ENV.APP_SUBFOLDER app.baseURL=${config.app.baseURL} env_prefix=${WG_ENV.APP_SUBFOLDER}`); 
+    }
+  }
+}
+
+// TODO: make static or object
+
+export default new Config();
