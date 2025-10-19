@@ -29,6 +29,7 @@ ENV HOST=0.0.0.0
 ENV INSECURE=true
 ENV INIT_ENABLED=false
 ENV DISABLE_IPV6=true
+ENV APP_SUBFOLDER=/wg-easy
 
 # Install Dependencies
 COPY src/package.json src/pnpm-lock.yaml ./

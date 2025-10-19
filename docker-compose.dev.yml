@@ -21,6 +21,8 @@ services:
       - INIT_PORT=51820
       - INIT_USERNAME=testtest
       - INIT_PASSWORD=Qweasdyxcv!2
+      - DISABLE_IPV6=true
+#      - APP_SUBFOLDER=/
       - APP_SUBFOLDER=/wg-easy
 
 # folders should be generated inside container

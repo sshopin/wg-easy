@@ -10,6 +10,10 @@ RUN corepack enable pnpm
 COPY src/package.json src/pnpm-lock.yaml ./
 RUN pnpm install
 
+# !!! APP_SUBFOLDER must be set before pnpm build since it's value will be 
+# hardcoded inside compiled JS
+ENV APP_SUBFOLDER=/wg-easy
+
 # Build UI
 COPY src ./
 RUN pnpm build
@@ -69,7 +73,7 @@ ENV INSECURE=false
 ENV INIT_ENABLED=false
 ENV DISABLE_IPV6=false
 
-LABEL org.opencontainers.image.source=https://github.com/wg-easy/wg-easy
+LABEL org.opencontainers.image.source=https://github.com/sshopin/wg-easy
 
 # Run Web UI
 CMD ["/usr/bin/dumb-init", "node", "server/index.mjs"]

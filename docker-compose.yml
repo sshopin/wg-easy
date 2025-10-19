@@ -9,7 +9,8 @@ services:
     #  - HOST=0.0.0.0
     #  - INSECURE=false
 
-    image: ghcr.io/wg-easy/wg-easy:15
+    #image: ghcr.io/wg-easy/wg-easy:15
+    image: my-wg-easy:15.1.0
     container_name: wg-easy
     networks:
       wg:
